@@ -1,0 +1,21 @@
+package com.flowerlabvlada.clients;
+
+import com.flowerlabvlada.models.PaymentRequest;
+import com.flowerlabvlada.models.PaymentResponse;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@RegisterRestClient(configKey = "com.flowerlabvlada.clients.PaymentClient")
+@Path("/payments")
+public interface PaymentClient {
+
+    @POST
+    @Path("/authorize")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    PaymentResponse authorizePayment(PaymentRequest request);
+}
