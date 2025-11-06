@@ -1,0 +1,13 @@
+package com.flowerlabvlada.models;
+
+import java.time.LocalDate;
+
+public record Order(
+        Long id,
+        Long customerId,
+        Long bouquetId,
+        double totalAmount,
+        String status,
+        LocalDate orderDate
+) {
+}

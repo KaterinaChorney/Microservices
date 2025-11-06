@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flower Lab Vlada Orders</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F9C6EE;
+        }
+
+        h1, h2 {
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Flower Lab Vlada Orders</h1>
+
+    <p>Привіт, <strong>{name}</strong>!</p>
+
+    <h2>Ваші замовлення:</h2>
+
+    {#if orders.size > 0}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Bouquet ID</th>
+                <th>Сума</th>
+                <th>Статус</th>
+                <th>Дата</th>
+            </tr>
+            </thead>
+            <tbody>
+            {#for order in orders}
+                <tr>
+                    <td>{order.id}</td>
+                    <td>{order.bouquetId}</td>
+                    <td>{order.totalAmount} UAH</td>
+                    <td>{order.status}</td>
+                    <td>{order.orderDate}</td>
+                </tr>
+            {/for}
+            </tbody>
+        </table>
+    {#else}
+        <p>У вас поки немає замовлень</p>
+    {/if}
+
+    <hr>
+    <h2>Доступні букети:</h2>
+
+    {#if bouquets.size > 0}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Ціна</th>
+                <th>Дія</th> </tr>
+            </thead>
+            <tbody>
+            {#for bouquet in bouquets}
+                <tr>
+                    <td>{bouquet.id}</td>
+                    <td>{bouquet.name}</td>
+                    <td>{bouquet.price} UAH</td>
+                    <td>
+                        <form action="/orders" method="POST">
+                            <input type="hidden" name="bouquetId" value="{bouquet.id}" />
+
+                            <button type="submit">Замовити</button>
+                        </form>
+                    </td>
+                </tr>
+            {/for}
+            </tbody>
+        </table>
+    {#else}
+        <p>На жаль, доступних букетів немає</p>
+    {/if}
+
+</div>
+</body>
+</html>
