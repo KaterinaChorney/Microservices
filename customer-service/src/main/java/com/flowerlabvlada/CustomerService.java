@@ -3,17 +3,16 @@ package com.flowerlabvlada;
 import com.flowerlabvlada.customer.grpc.CustomerGrpcService;
 import com.flowerlabvlada.customer.grpc.CustomerRequest;
 import com.flowerlabvlada.customer.grpc.CustomerResponse;
-
 import io.quarkus.grpc.GrpcService;
+import io.quarkus.security.Authenticated;
 import io.smallrye.mutiny.Uni;
-
-import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @GrpcService
+@Authenticated
 public class CustomerService implements CustomerGrpcService {
 
     private static final Map<Long, Customer> FAKE_REPO = List.of(
