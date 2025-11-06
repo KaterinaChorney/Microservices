@@ -7,13 +7,17 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import java.util.List;
 
 @RegisterRestClient(configKey = "com.flowerlabvlada.clients.CatalogClient")
-@Path("/bouquets") // Базовий шлях до catalog-service
+@Path("/bouquets")
 public interface CatalogClient {
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     Bouquet getBouquetById(@PathParam("id") Long id);
+
+    @GET
+    List<Bouquet> getAllBouquets();
 }

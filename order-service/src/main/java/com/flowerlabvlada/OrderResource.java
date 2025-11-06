@@ -7,21 +7,19 @@ import com.flowerlabvlada.customer.grpc.CustomerGrpcService;
 import com.flowerlabvlada.customer.grpc.CustomerRequest;
 import com.flowerlabvlada.customer.grpc.CustomerResponse;
 import com.flowerlabvlada.models.*;
-
 import io.quarkus.grpc.GrpcClient;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import com.flowerlabvlada.models.Bouquet;
 
 @Path("/orders")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class OrderResource {
 
     @Inject
@@ -43,7 +41,9 @@ public class OrderResource {
     OrderRepository orderRepository;
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response createOrder(OrderRequest orderRequest) {
+
         CustomerResponse customer;
         try {
             customer = customerClient
@@ -112,5 +112,11 @@ public class OrderResource {
     @GET
     public List<Order> getAllOrders() {
         return orderRepository.listAll();
+    }
+
+    @GET
+    @Path("/bouquets")
+    public List<Bouquet> getAvailableBouquets() {
+        return catalogClient.getAllBouquets();
     }
 }
