@@ -1,6 +1,6 @@
 package com.flowerlabvlada.clients;
 
-import com.flowerlabvlada.models.Bouquet;
+import com.flowerlabvlada.entities.Bouquet;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;

@@ -1,6 +1,6 @@
 package com.flowerlabvlada.clients;
 
-import com.flowerlabvlada.models.DeliveryQuote;
+import com.flowerlabvlada.entities.DeliveryQuote;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
