@@ -6,16 +6,12 @@ import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.util.List;
 import com.flowerlabvlada.models.Bouquet;
 import com.flowerlabvlada.models.OrderRequest;
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.core.Response;
 import java.net.URI;
 
@@ -46,6 +42,7 @@ public class OrdersPage {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createOrder(@FormParam("bouquetId") Long bouquetId) {
 
         Long customerId = 1L;

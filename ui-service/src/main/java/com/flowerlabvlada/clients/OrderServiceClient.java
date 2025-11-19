@@ -8,11 +8,12 @@ import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import java.util.List;
 import com.flowerlabvlada.models.Bouquet;
-
 import com.flowerlabvlada.models.OrderRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
+import com.flowerlabvlada.security.TokenPropagationFilter;
 
 @RegisterRestClient(configKey = "com.flowerlabvlada.clients.OrderServiceClient")
 @Path("/orders")
