@@ -1,0 +1,5 @@
+INSERT INTO customers.customers (id, name, email, address, phone) VALUES (1, 'Олександра Христафулова', 'sasha.hr@gmail.com', 'м. Чернівці, вул. Героїв Майдану, 184', '+380501112233');
+INSERT INTO customers.customers (id, name, email, address, phone) VALUES (2, 'Анна Іванюк', 'anna.ivanyuk@gmail.com', 'м. Чернівці, вул. Головна, 109', '+380931234567');
+INSERT INTO customers.customers (id, name, email, address, phone) VALUES (3, 'Іван Горняк ', 'ivan.g@gmail.com', 'м. Чернівці, вул. Руська, 12', '+380503498239');
+INSERT INTO customers.customers (id, name, email, address, phone) VALUES (4, 'Христина Чорней', 'kristi.chorney@gmail.com', 'м. Тернопіль, вул. Руська, 55', '+380967834092');
+INSERT INTO customers.customers (id, name, email, address, phone) VALUES (5, 'Дмитро Пономаренко', 'dmutro.ponomarenko@gmail.com', 'м. Івано-Франківськ, вул. Степана Бандери,6', '+380671234890');
