@@ -1,4 +1,4 @@
-package com.flowerlabvlada.models;
+package com.flowerlabvlada.entities;
 
 public record DeliveryQuote(
         long orderId,
