@@ -29,7 +29,6 @@ public class GrpcTokenPropagationInterceptor implements ClientInterceptor {
                     Metadata.Key<String> authKey = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
                     headers.put(authKey, "Bearer " + credential.getToken());
                 }
-
                 super.start(responseListener, headers);
             }
         };
