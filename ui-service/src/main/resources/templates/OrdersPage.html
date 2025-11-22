@@ -1,119 +1,369 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Flower Lab Vlada Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Lab Vlada - Букети з Любов'ю</title>
 
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-            color: #333;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #faf9f7 0%, #f5f1ed 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #F9C6EE 0%, #FBD5F0 100%);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(249, 198, 238, 0.2);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #8B2E5F;
+            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .greeting {
+            color: #6B1E4F;
+            font-size: 1.1em;
+            font-weight: 500;
         }
 
         .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px 30px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        table {
+        /* Sections */
+        section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #F9C6EE;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .section-title::before {
+            content: "🌸";
+            font-size: 1.2em;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            background: #fff;
+            border-radius: 12px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        /* Orders Section */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .order-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-left: 4px solid #F9C6EE;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 198, 238, 0.15);
+        }
+
+        .order-card strong {
+            color: #F9C6EE;
+            font-size: 1.1em;
+        }
+
+        .order-info {
+            margin: 15px 0;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-info:last-child {
+            border-bottom: none;
+        }
+
+        .order-label {
+            color: #999;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .order-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Bouquets Section */
+        .bouquets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .bouquet-card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .bouquet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(212, 165, 212, 0.2);
+        }
+
+        .bouquet-image {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            height: 200px;
+            background: linear-gradient(135deg, #f0e6f0 0%, #e8d5e8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
         }
 
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
+        .bouquet-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        th {
-            background-color: #F9C6EE;
+        .bouquet-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
         }
 
-        h1, h2 {
-            color: #222;
+        .bouquet-id {
+            color: #999;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .bouquet-price {
+            font-size: 1.8em;
+            color: #F9C6EE;
+            font-weight: 700;
+            margin-bottom: 15px;
+            margin-top: auto;
+        }
+
+        .bouquet-price span {
+            font-size: 0.6em;
+            color: #999;
+            font-weight: 500;
+        }
+
+        /* Button */
+        .order-button {
+            background: linear-gradient(135deg, #F9C6EE 0%, #F8B5E8 100%);
+            color: #6B1E4F;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(249, 198, 238, 0.3);
+        }
+
+        .order-button:hover {
+            background: linear-gradient(135deg, #F8B5E8 0%, #F6A5E0 100%);
+            box-shadow: 0 6px 18px rgba(249, 198, 238, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .order-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+
+            .orders-grid,
+            .bouquets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bouquet-image {
+                height: 150px;
+                font-size: 3em;
+            }
+        }
+
+        /* No Orders/Bouquets */
+        .no-items {
+            text-align: center;
+            padding: 60px 20px;
+            color: #bbb;
+        }
+
+        .no-items-emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>🌹 Flower Lab Vlada</h1>
+    <p class="greeting">Привіт, <strong>{name}</strong>! Ласкаво просимо до нашого світу квітів</p>
+</header>
+
 <div class="container">
 
-    <h1>Flower Lab Vlada Orders</h1>
+    <!-- Orders Section -->
+    <section>
+        <h2 class="section-title">Ваші замовлення</h2>
 
-    <p>Привіт, <strong>{name}</strong>!</p>
+        {#if orders.size > 0}
+            <div class="orders-grid">
+                {#for order in orders}
+                    <div class="order-card">
+                        <div class="order-info">
+                            <span class="order-label">Замовлення №</span>
+                            <strong>{order.id}</strong>
+                        </div>
+                        <div class="order-info">
+                            <span class="order-label">Букет</span>
+                            <span class="order-value">{order.bouquetId}</span>
+                        </div>
+                        <div class="order-info">
+                            <span class="order-label">Сума</span>
+                            <strong style="color: #c084c0; font-size: 1.2em;">{order.totalAmount} ₴</strong>
+                        </div>
+                        <div class="order-info">
+                            <span class="order-label">Дата</span>
+                            <span class="order-value">{order.orderDate}</span>
+                        </div>
+                        <div class="order-info" style="border-bottom: none;">
+                            <span class="order-label">Статус</span>
+                            <span class="status-badge status-{order.status.toLowerCase()}">{order.status}</span>
+                        </div>
+                    </div>
+                {/for}
+            </div>
+        {#else}
+            <div class="empty-state">
+                <div class="no-items">
+                    <div class="no-items-emoji">📦</div>
+                    <p>У вас поки немає замовлень</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Виберіть букет нижче і зробіть своє перше замовлення!</p>
+                </div>
+            </div>
+        {/if}
+    </section>
 
-    <h2>Ваші замовлення:</h2>
+    <!-- Bouquets Section -->
+    <section>
+        <h2 class="section-title">Доступні букети</h2>
 
-    {#if orders.size > 0}
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Bouquet ID</th>
-                <th>Сума</th>
-                <th>Статус</th>
-                <th>Дата</th>
-            </tr>
-            </thead>
-            <tbody>
-            {#for order in orders}
-                <tr>
-                    <td>{order.id}</td>
-                    <td>{order.bouquetId}</td>
-                    <td>{order.totalAmount} UAH</td>
-                    <td>{order.status}</td>
-                    <td>{order.orderDate}</td>
-                </tr>
-            {/for}
-            </tbody>
-        </table>
-    {#else}
-        <p>У вас поки немає замовлень</p>
-    {/if}
-
-    <hr>
-    <h2>Доступні букети:</h2>
-
-    {#if bouquets.size > 0}
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Назва</th>
-                <th>Ціна</th>
-                <th>Дія</th> </tr>
-            </thead>
-            <tbody>
-            {#for bouquet in bouquets}
-                <tr>
-                    <td>{bouquet.id}</td>
-                    <td>{bouquet.name}</td>
-                    <td>{bouquet.price} UAH</td>
-                    <td>
-                        <form action="/orders" method="POST">
-                            <input type="hidden" name="bouquetId" value="{bouquet.id}" />
-
-                            <button type="submit">Замовити</button>
-                        </form>
-                    </td>
-                </tr>
-            {/for}
-            </tbody>
-        </table>
-    {#else}
-        <p>На жаль, доступних букетів немає</p>
-    {/if}
+        {#if bouquets.size > 0}
+            <div class="bouquets-grid">
+                {#for bouquet in bouquets}
+                    <div class="bouquet-card">
+                        <div class="bouquet-image">🌺</div>
+                        <div class="bouquet-content">
+                            <div class="bouquet-id">ID: {bouquet.id}</div>
+                            <div class="bouquet-name">{bouquet.name}</div>
+                            <div class="bouquet-price">
+                                {bouquet.price} <span>₴</span>
+                            </div>
+                            <form action="/orders" method="POST" style="width: 100%;">
+                                <input type="hidden" name="bouquetId" value="{bouquet.id}" />
+                                <button type="submit" class="order-button">Замовити букет</button>
+                            </form>
+                        </div>
+                    </div>
+                {/for}
+            </div>
+        {#else}
+            <div class="empty-state">
+                <div class="no-items">
+                    <div class="no-items-emoji">🌼</div>
+                    <p>На жаль, доступних букетів немає</p>
+                    <p style="font-size: 0.9em; margin-top: 10px;">Повертайтеся пізніше - ми постійно поповнюємо асортимент!</p>
+                </div>
+            </div>
+        {/if}
+    </section>
 
 </div>
+
 </body>
 </html>
