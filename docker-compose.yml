@@ -1,0 +1,142 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  postgres-keycloak-db:
+    image: postgres:15
+    container_name: postgres-keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - keycloak_pg_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+  postgres-app-db:
+    image: postgres:15
+    container_name: postgres-app-db
+    environment:
+      POSTGRES_DB: flower_lab_vlada_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: katya2005
+    ports:
+      - "5434:5432"
+    volumes:
+      - app_pg_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: keycloak_prod
+    command: start --hostname-url=http://localhost:8180 --hostname-admin-url=http://localhost:8180
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres-keycloak-db
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: true
+      KC_HTTP_PORT: 8080
+    ports:
+      - "8180:8080"
+    depends_on:
+      - postgres-keycloak-db
+
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: com.flowerlabvlada/customer-service:1.0.0-SNAPSHOT
+    container_name: customer-service
+    ports:
+      - "8081:8080"
+      - "9000:9000"
+    depends_on:
+      - keycloak
+      - postgres-app-db
+
+  catalog-service:
+    build:
+      context: ./catalog-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: com.flowerlabvlada/catalog-service:1.0.0-SNAPSHOT
+    container_name: catalog-service
+    ports:
+      - "8080:8080"
+      - "9002:9002"
+    depends_on:
+      - keycloak
+      - postgres-app-db
+
+  delivery-service:
+    build:
+      context: ./delivery-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: com.flowerlabvlada/delivery-service:1.0.0-SNAPSHOT
+    container_name: delivery-service
+    ports:
+      - "8082:8080"
+      - "9003:9003"
+    depends_on:
+      - keycloak
+
+  payment-service:
+    build:
+      context: ./payment-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: com.flowerlabvlada/payment-service:1.0.0-SNAPSHOT
+    container_name: payment-service
+    ports:
+      - "8083:8080"
+      - "9004:9004"
+    depends_on:
+      - keycloak
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: com.flowerlabvlada/order-service:1.0.0-SNAPSHOT
+    container_name: order-service
+    ports:
+      - "8084:8080"
+      - "9001:9001"
+    depends_on:
+      - keycloak
+      - catalog-service
+      - delivery-service
+      - payment-service
+      - customer-service
+      - postgres-app-db
+
+  ui-service:
+    build:
+      context: ./ui-service
+      dockerfile: src/main/docker/Dockerfile.jvm
+    image: com.flowerlabvlada/ui-service:1.0.0-SNAPSHOT
+    container_name: ui-service
+    ports:
+      - "8085:8080"
+    environment:
+      QUARKUS_OIDC_INITIAL_TOKEN_REQUEST_TIMEOUT: 30S
+    depends_on:
+      - keycloak
+      - order-service
+
+volumes:
+  keycloak_pg_data:
+  app_pg_data:
