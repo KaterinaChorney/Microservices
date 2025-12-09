@@ -17,6 +17,14 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 @Path("/orders")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,6 +36,11 @@ public class OrderResource {
     @Inject @RestClient PaymentClient paymentClient;
     @GrpcClient("customer") CustomerGrpcService customerClient;
     @Inject OrderRepository orderRepository;
+    @Inject
+    @Channel("orders-out")
+    Emitter<String> orderEmitter;
+    @Inject
+    ObjectMapper objectMapper;
 
     @POST
     @Transactional
@@ -45,7 +58,6 @@ public class OrderResource {
         } catch (Exception e) {
             return Response.status(Response.Status.NOT_FOUND).entity("Bouquet not found: " + e.getMessage()).build();
         }
-
         if (bouquet.stockQuantity() <= 0) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Bouquet is out of stock: " + bouquet.name()).build();
         }
@@ -81,7 +93,24 @@ public class OrderResource {
                 LocalDate.now()
         );
 
-        orderRepository.save(newOrder);
+        orderRepository.persist(newOrder);
+
+        try {
+            OrderCreatedEvent event = new OrderCreatedEvent(
+                    newOrder.id,
+                    newOrder.totalAmount,
+                    newOrder.deliveryAddress
+            );
+
+            String jsonEvent = objectMapper.writeValueAsString(event);
+
+            orderEmitter.send(jsonEvent);
+
+            System.out.println(">>> Message sent to RabbitMQ: " + jsonEvent);
+
+        } catch (JsonProcessingException e) {
+            System.err.println("Failed to send message to RabbitMQ: " + e.getMessage());
+        }
 
         return Response.status(Response.Status.CREATED).entity(newOrder).build();
     }
